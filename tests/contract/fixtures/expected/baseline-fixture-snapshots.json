@@ -1,0 +1,269 @@
+{
+  "created": {
+    "rooms": [
+      {
+        "id": "room_fixture_kitchen",
+        "name": "Fixture Kitchen"
+      },
+      {
+        "id": "room_fixture_office",
+        "name": "Fixture Office"
+      }
+    ],
+    "chores": {
+      "parent": {
+        "id": "chore_fixture_parent",
+        "name": "Fixture Parent",
+        "schedule_type": "one_time",
+        "schedule": {
+          "date": "2026-02-11"
+        },
+        "time_of_day": "AM",
+        "minutes": 20,
+        "parent_id": null,
+        "global_order": 0,
+        "is_active": true,
+        "tags": [],
+        "room_ids": [
+          "room_fixture_kitchen"
+        ]
+      },
+      "child": {
+        "id": "chore_fixture_child",
+        "name": "Fixture Child",
+        "schedule_type": "one_time",
+        "schedule": {
+          "date": "2026-02-11"
+        },
+        "time_of_day": "PM",
+        "minutes": 5,
+        "parent_id": "chore_fixture_parent",
+        "global_order": 0,
+        "is_active": true,
+        "tags": [],
+        "room_ids": [
+          "room_fixture_kitchen"
+        ]
+      },
+      "solo": {
+        "id": "chore_fixture_solo",
+        "name": "Fixture Solo",
+        "schedule_type": "daily",
+        "schedule": null,
+        "time_of_day": "AM",
+        "minutes": 15,
+        "parent_id": null,
+        "global_order": 1,
+        "is_active": true,
+        "tags": [
+          "baseline"
+        ],
+        "room_ids": [
+          "room_fixture_office"
+        ]
+      }
+    }
+  },
+  "reads": {
+    "parent_after_child": {
+      "id": "chore_fixture_parent",
+      "name": "Fixture Parent",
+      "schedule_type": "one_time",
+      "schedule": {
+        "date": "2026-02-11"
+      },
+      "time_of_day": null,
+      "minutes": null,
+      "parent_id": null,
+      "global_order": 0,
+      "is_active": true,
+      "tags": [],
+      "room_ids": [
+        "room_fixture_kitchen"
+      ]
+    },
+    "subtasks": {
+      "parent_id": "chore_fixture_parent",
+      "subtasks": [
+        {
+          "id": "chore_fixture_child",
+          "name": "Fixture Child",
+          "schedule_type": "one_time",
+          "schedule": {
+            "date": "2026-02-11"
+          },
+          "time_of_day": "PM",
+          "minutes": 5,
+          "parent_id": "chore_fixture_parent",
+          "global_order": 0,
+          "is_active": true,
+          "tags": [],
+          "room_ids": [
+            "room_fixture_kitchen"
+          ]
+        }
+      ]
+    },
+    "chores_with_subtasks_fixture": [
+      {
+        "id": "chore_fixture_parent",
+        "name": "Fixture Parent",
+        "schedule_type": "one_time",
+        "schedule": {
+          "date": "2026-02-11"
+        },
+        "time_of_day": null,
+        "minutes": null,
+        "parent_id": null,
+        "global_order": 0,
+        "is_active": true,
+        "tags": [],
+        "room_ids": [
+          "room_fixture_kitchen"
+        ],
+        "subtasks": [
+          {
+            "id": "chore_fixture_child",
+            "name": "Fixture Child",
+            "schedule_type": "one_time",
+            "schedule": {
+              "date": "2026-02-11"
+            },
+            "time_of_day": "PM",
+            "minutes": 5,
+            "parent_id": "chore_fixture_parent",
+            "global_order": 0,
+            "is_active": true,
+            "tags": [],
+            "room_ids": [
+              "room_fixture_kitchen"
+            ]
+          }
+        ],
+        "has_subtasks": true,
+        "total_minutes": 5
+      },
+      {
+        "id": "chore_fixture_solo",
+        "name": "Fixture Solo",
+        "schedule_type": "daily",
+        "schedule": null,
+        "time_of_day": "AM",
+        "minutes": 15,
+        "parent_id": null,
+        "global_order": 1,
+        "is_active": true,
+        "tags": [
+          "baseline"
+        ],
+        "room_ids": [
+          "room_fixture_office"
+        ],
+        "subtasks": [],
+        "has_subtasks": false,
+        "total_minutes": 15
+      }
+    ],
+    "chores_for_date_fixture": {
+      "date": "2026-02-11",
+      "chores": [
+        {
+          "id": "chore_fixture_child",
+          "name": "Fixture Child",
+          "schedule_type": "one_time",
+          "schedule": {
+            "date": "2026-02-11"
+          },
+          "time_of_day": "PM",
+          "minutes": 5,
+          "parent_id": "chore_fixture_parent",
+          "global_order": 0,
+          "is_active": true,
+          "tags": [],
+          "room_ids": [
+            "room_fixture_kitchen"
+          ],
+          "parent_name": "Fixture Parent"
+        },
+        {
+          "id": "chore_fixture_solo",
+          "name": "Fixture Solo",
+          "schedule_type": "daily",
+          "schedule": null,
+          "time_of_day": "AM",
+          "minutes": 15,
+          "parent_id": null,
+          "global_order": 1,
+          "is_active": true,
+          "tags": [
+            "baseline"
+          ],
+          "room_ids": [
+            "room_fixture_office"
+          ]
+        }
+      ]
+    },
+    "chores_for_range_fixture": {
+      "start": "2026-02-11",
+      "end": "2026-02-11",
+      "chores_by_date": {
+        "2026-02-11": [
+          {
+            "id": "chore_fixture_child",
+            "name": "Fixture Child",
+            "schedule_type": "one_time",
+            "schedule": {
+              "date": "2026-02-11"
+            },
+            "time_of_day": "PM",
+            "minutes": 5,
+            "parent_id": "chore_fixture_parent",
+            "global_order": 0,
+            "is_active": true,
+            "tags": [],
+            "room_ids": [
+              "room_fixture_kitchen"
+            ],
+            "parent_name": "Fixture Parent"
+          },
+          {
+            "id": "chore_fixture_solo",
+            "name": "Fixture Solo",
+            "schedule_type": "daily",
+            "schedule": null,
+            "time_of_day": "AM",
+            "minutes": 15,
+            "parent_id": null,
+            "global_order": 1,
+            "is_active": true,
+            "tags": [
+              "baseline"
+            ],
+            "room_ids": [
+              "room_fixture_office"
+            ]
+          }
+        ]
+      }
+    },
+    "daily_order": {
+      "date": "2026-02-11",
+      "order": [
+        "chore_fixture_solo",
+        "chore_fixture_child"
+      ]
+    },
+    "completions_for_date": {
+      "date": "2026-02-11",
+      "completed": [
+        "chore_fixture_solo"
+      ]
+    },
+    "completions_range": {
+      "2026-02-11": [
+        "chore_fixture_solo"
+      ]
+    }
+  }
+}

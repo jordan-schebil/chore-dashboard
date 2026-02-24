@@ -153,7 +153,7 @@ const choreReducer = (state, action) => {
   switch (action.type) {
     case 'ADD_CHORE': {
       const { chore, scheduleType } = action.payload;
-      return { ...state, [scheduleType]: [...state[scheduleType], { ...chore, id: generateId() }] };
+      return { ...state, [scheduleType]: [...state[scheduleType], chore] };
     }
     case 'UPDATE_CHORE': {
       const { chore, oldScheduleType, newScheduleType } = action.payload;
@@ -1725,12 +1725,16 @@ export default function ChoreDashboard() {
                   return (
                     <li
                       key={id}
-                      draggable
-                      onDragStart={(e) => handleGlobalDragStart(id, e)}
-                      onDragOver={(e) => e.preventDefault()}
-                      onDrop={() => handleGlobalDrop(id)}
-                      className="flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-lg hover:border-gray-300"
-                    >
+                       draggable
+                       onDragStart={(e) => handleGlobalDragStart(id, e)}
+                       onDragOver={(e) => e.preventDefault()}
+                       onDrop={(e) => {
+                         e.preventDefault();
+                         e.stopPropagation();
+                         handleGlobalDrop(id);
+                       }}
+                       className="flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-lg hover:border-gray-300"
+                     >
                       <span className="text-gray-300 cursor-grab select-none">
                         <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                           <path d="M7 4a1 1 0 112 0 1 1 0 01-2 0zm4 0a1 1 0 112 0 1 1 0 01-2 0zM7 10a1 1 0 112 0 1 1 0 01-2 0zm4 0a1 1 0 112 0 1 1 0 01-2 0zM7 16a1 1 0 112 0 1 1 0 01-2 0zm4 0a1 1 0 112 0 1 1 0 01-2 0z" />

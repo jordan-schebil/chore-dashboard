@@ -12,7 +12,7 @@ export default defineConfig({
   },
   webServer: [
     {
-      command: 'python main.py',
+      command: 'npm run start:api:node',
       url: 'http://localhost:8000',
       reuseExistingServer: true
     },

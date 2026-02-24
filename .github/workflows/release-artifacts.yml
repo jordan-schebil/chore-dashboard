@@ -1,0 +1,93 @@
+name: Release Artifacts
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      release_label:
+        description: Optional artifact label override (folder/zip name without extension)
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-artifacts-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-release-artifacts:
+    runs-on: windows-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Resolve release label
+        id: meta
+        shell: pwsh
+        run: |
+          $manual = "${{ inputs.release_label }}".Trim()
+          if ($manual) {
+            $label = $manual
+          }
+          elseif ("${{ github.ref_type }}" -eq "tag") {
+            $label = "chore-dashboard-${{ github.ref_name }}"
+          }
+          else {
+            $label = "chore-dashboard-manual-${{ github.run_number }}"
+          }
+          $label = $label -replace "[^a-zA-Z0-9._-]", "-"
+          "release_label=$label" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify release (build + unit + contract)
+        env:
+          CI: 'true'
+        run: npm run verify:release
+
+      - name: Package staged release artifact folder
+        shell: pwsh
+        run: npm run package:release -- --label "${{ steps.meta.outputs.release_label }}"
+
+      - name: Create zip archive
+        shell: pwsh
+        run: npm run package:release:zip -- -ArtifactDir ".\release-artifacts\${{ steps.meta.outputs.release_label }}" -Force
+
+      - name: Generate SHA-256 checksum for zip
+        shell: pwsh
+        run: |
+          $zip = ".\release-artifacts\${{ steps.meta.outputs.release_label }}.zip"
+          $hash = Get-FileHash -Algorithm SHA256 -Path $zip
+          "$($hash.Hash) *$($hash.Path | Split-Path -Leaf)" | Set-Content -LiteralPath "$zip.sha256.txt"
+
+      - name: Upload release artifacts (folder + zip + checksum)
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.meta.outputs.release_label }}
+          if-no-files-found: error
+          path: |
+            release-artifacts/${{ steps.meta.outputs.release_label }}
+            release-artifacts/${{ steps.meta.outputs.release_label }}.zip
+            release-artifacts/${{ steps.meta.outputs.release_label }}.zip.sha256.txt
+
+      - name: Job summary
+        shell: pwsh
+        run: |
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "## Release Artifacts"
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value ""
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "- Label: ``${{ steps.meta.outputs.release_label }}``"
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "- Uploaded: staged artifact folder, .zip archive, and SHA-256 checksum"
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "- Source of truth: artifacts uploaded by this workflow run for the tagged commit"

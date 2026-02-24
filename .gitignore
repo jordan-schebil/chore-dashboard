@@ -36,6 +36,9 @@ chores.db
 *.db-shm
 *.sqlite
 *.sqlite3
+backups/
+release-artifacts/
+deployments/
 
 # Logs
 *.log

@@ -24,7 +24,7 @@ End Function
 
 ' Start backend if needed
 If Not IsPortListening(8000) Then
-    objShell.Run "cmd.exe /c ""cd /d """ & projDir & """ && python main.py""", 0, False
+    objShell.Run "cmd.exe /c ""cd /d """ & projDir & """ && npm run start:api:node""", 0, False
 End If
 
 ' Start frontend if needed
